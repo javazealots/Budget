@@ -24,4 +24,9 @@ public class GlobalConstants {
     public static final String PATH_SQL = "sql.xml";
     public static final String PATH_GLOBAL = "global.xml";
 
+    /**
+     * 网络连接需要的常量
+     */
+    public static final String REQUEST_METHOD_GET = "GET";
+    public static final String REQUEST_METHOD_POST = "POST";
 }

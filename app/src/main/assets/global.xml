@@ -1,4 +1,4 @@
 <global>
     <syncHour>22:00</syncHour>
-    <remoteIP>192.168.147.148</remoteIP>
+    <remoteIP>http://192.168.191.1:8080</remoteIP>
 </global>

@@ -1,6 +1,6 @@
 <sql>
     <user>
-        <userExist>select * from user order by lastLoginDate</userExist>
+        <findByLastLoginDate>select * from user order by lastLoginDate</findByLastLoginDate>
     </user>
     <budget>
 

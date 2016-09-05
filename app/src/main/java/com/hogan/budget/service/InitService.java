@@ -1,6 +1,7 @@
 package com.hogan.budget.service;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.hogan.budget.base.BaseResource;
 import com.hogan.budget.base.BaseService;
@@ -9,7 +10,12 @@ import com.hogan.budget.base.bean.GlobalXML;
 import com.hogan.budget.base.bean.SqlXML;
 import com.hogan.budget.base.global.GlobalConstants;
 import com.hogan.budget.base.global.GlobalResource;
+import com.hogan.budget.bean.User;
+import com.hogan.budget.dao.UserDao;
+import com.hogan.budget.dao.impl.UserDaoImpl;
 import com.hogan.budget.type.ResourceType;
+import com.hogan.budget.util.DBHelper;
+import com.hogan.budget.util.NetHelper;
 import com.hogan.budget.util.UUID;
 import com.hogan.budget.util.XMLParse;
 import com.hogan.budget.view.LoadingDialog;
@@ -76,9 +82,11 @@ public class InitService extends BaseService {
                     resourceLoadingProgress = true;
                 } catch (IOException e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     try {
-                        in.close();
+                        if (in != null) {
+                            in.close();
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -87,11 +95,33 @@ public class InitService extends BaseService {
             }
         }).start();
 
-        //更新本地数据
+        //查询本地/远程用户数据(减少登录时联网校验的时间)
         new Thread(new Runnable() {
             @Override
             public void run() {
-
+                for (; ; ) {
+                    if (globalContext.getGlobalResource().getResource(ResourceType.DATABASE) != null) {
+                        SQLiteDatabase sqLiteDatabase = new DBHelper(globalContext.getCurrentActivity()).getWritableDatabase();
+                        globalContext.setSqLiteDatabase(sqLiteDatabase);
+                        if (!globalContext.getFirstCreateDatabase()) {//并非第一次创建数据库
+                            //本地数据库中有无用户的数据(用户安装后没有直接使用)
+                            UserDao userDao = new UserDaoImpl();
+                            User user = userDao.findByLastLoginDate();
+                            if (user != null) {
+                                globalContext.setCurrentUser(user);
+                                GlobalXML globalXML = (GlobalXML) globalContext.getGlobalResource().getResource(ResourceType.GLOBAL);
+                                NetHelper.request(globalXML.getRemoteIP(), GlobalConstants.REQUEST_METHOD_POST, null);
+                            } else {
+                                GlobalXML globalXML = (GlobalXML) globalContext.getGlobalResource().getResource(ResourceType.GLOBAL);
+                                NetHelper.request(globalXML.getRemoteIP(), GlobalConstants.REQUEST_METHOD_POST, null);
+                            }
+                        } else {
+                            //第一次创建数据库
+                        }
+                        dataUpdateLoadingProgress = true;
+                        break;
+                    }
+                }
             }
         }).start();
 

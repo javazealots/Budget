@@ -37,14 +37,14 @@ public class SqlXML implements BaseResource {
      */
     public static class UserSql implements BaseResource {
 
-        private String userExist;
+        private String findByLastLoginDate;
 
-        public String getUserExist() {
-            return userExist;
+        public String getFindByLastLoginDate() {
+            return findByLastLoginDate;
         }
 
-        public void setUserExist(String userExist) {
-            this.userExist = userExist;
+        public void setFindByLastLoginDate(String findByLastLoginDate) {
+            this.findByLastLoginDate = findByLastLoginDate;
         }
     }
 
