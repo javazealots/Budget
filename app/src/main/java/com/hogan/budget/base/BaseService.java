@@ -21,7 +21,7 @@ public abstract class BaseService extends Service {
 
     private volatile Looper mServiceLooper;
     private volatile ServiceHandler mServiceHandler;
-    public GlobalContext globalContext=GlobalContext.newInstance();
+    public final GlobalContext globalContext=GlobalContext.newInstance();
     private String mName;
     private boolean mRedelivery;
 

@@ -2,20 +2,16 @@
     <localVersion>1</localVersion> <!--本地的数据库版本，当本地和远程的数据库不一致时，通过这个字段来更新数据库-->
     <name>Budget</name> <!--数据库名称-->
     <!--初次安装app时执行该语句-->
-    <create>
-        <table>
+    <initTable>
             CREATE TABLE user(
                 userId char(32) primary key,
                 username varchar(20),
                 password varchar(20),
                 lastLoginDate datetime
             )
-        </table>
-    </create>
+    </initTable>
     <!--当数据库需要更新时，执行该语句-->
-    <update>
-        <table>
+    <updateTable>
             alter table user add lastLoginDate date;
-        </table>
-    </update>
+    </updateTable>
 </database>

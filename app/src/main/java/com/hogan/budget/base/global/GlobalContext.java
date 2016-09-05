@@ -1,6 +1,6 @@
 package com.hogan.budget.base.global;
 
-import com.hogan.budget.base.BaseActivity;
+import android.app.Activity;
 
 /**
  * Created by Hogan on 9/3/2016.
@@ -11,12 +11,13 @@ public class GlobalContext {
     private static final GlobalContext globalContext = new GlobalContext();
 
     //当前活动的activity
-    private BaseActivity currentActivity;
+    private Activity currentActivity;
 
     //全局的资源文件接口
     private GlobalResource globalResource;
 
     private GlobalContext() {
+        globalResource=GlobalResource.newInstance();
     }
 
     public static GlobalContext newInstance() {
@@ -31,11 +32,11 @@ public class GlobalContext {
         this.globalResource = globalResource;
     }
 
-    public BaseActivity getCurrentActivity() {
+    public Activity getCurrentActivity() {
         return currentActivity;
     }
 
-    public void setCurrentActivity(BaseActivity currentActivity) {
+    public void setCurrentActivity(Activity currentActivity) {
         this.currentActivity = currentActivity;
     }
 }
